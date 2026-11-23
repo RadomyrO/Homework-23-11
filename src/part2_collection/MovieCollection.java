@@ -11,16 +11,13 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Comparator;
 
-// Part 2. Collection class built on the base of array
+// Part 2. Collection
 public class MovieCollection {
 
-    // Part 2.7 One specific file name for this program
     public static final String FILE_NAME = "data/movies.txt";
 
-    private Movie[] items = new Movie[0];  // array always has exact length
-    private int count = 0;                 // collection manages item count by itself
-
-    // ---------- Helpers ----------
+    private Movie[] items = new Movie[0];
+    private int count = 0;
 
     public int size() {
         return count;
@@ -30,18 +27,15 @@ public class MovieCollection {
         return i >= 0 && i < count;
     }
 
-    // ---------- Part 2.1 Add ----------
-
-    // Increases the array by one after every adding
+    // Part 2.1 add
     public void add(Movie movie) {
         items = Arrays.copyOf(items, count + 1);
         items[count] = movie;
         count++;
     }
 
-    // ---------- Part 2.2 Remove ----------
-
-    // Creates a new array with correct length and copies all items except i
+    // Part 2.2 remove
+    // new array without element i
     public boolean remove(int i) {
         if (!isValidIndex(i)) {
             return false;
@@ -58,9 +52,7 @@ public class MovieCollection {
         return true;
     }
 
-    // ---------- Part 2.3 Print ----------
-
-    // Detailed information about one item
+    // Part 2.3 print
     public void printOne(int i) {
         if (!isValidIndex(i)) {
             System.out.println("No movie with number " + (i + 1));
@@ -70,18 +62,16 @@ public class MovieCollection {
         System.out.println(items[i].getDescription());
     }
 
-    // Detailed information about every item
     public void printAll() {
         if (printIfEmpty()) {
             return;
         }
         for (int i = 0; i < count; i++) {
             printOne(i);
-            System.out.println("------------------------------");
+            System.out.println();
         }
     }
 
-    // Numbered list with one-line information
     public void printList() {
         if (printIfEmpty()) {
             return;
@@ -103,16 +93,12 @@ public class MovieCollection {
         return false;
     }
 
-    // ---------- Part 2.4 Sort ----------
-
-    // Sorts by numeric property: year (older movies first)
+    // Part 2.4 sort by year
     public void sort() {
         Arrays.sort(items, Comparator.comparingInt(Movie::getYear));
     }
 
-    // ---------- Part 2.5 Search by phrase ----------
-
-    // Prints items (with numbers) whose title, director or genre contain the phrase
+    // Part 2.5 search
     public void search(String phrase) {
         int found = 0;
         for (int i = 0; i < count; i++) {
@@ -124,8 +110,7 @@ public class MovieCollection {
         printFoundCount(found);
     }
 
-    // ---------- Part 2.6 Search by year ----------
-
+    // Part 2.6 search by year
     public void searchByYear(int year) {
         int found = 0;
         for (int i = 0; i < count; i++) {
@@ -141,14 +126,12 @@ public class MovieCollection {
         System.out.println(found == 0 ? "Nothing found." : "Found: " + found);
     }
 
-    // ---------- Part 2.7 Save / read file (bonus) ----------
-
-    // Writes every movie as one line of the file
+    // Part 2.7 file
     public void saveToFile() throws IOException {
         File file = new File(FILE_NAME);
         File folder = file.getParentFile();
         if (folder != null) {
-            folder.mkdirs();  // create "data" folder if it does not exist
+            folder.mkdirs();
         }
         try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
             for (int i = 0; i < count; i++) {
@@ -157,7 +140,6 @@ public class MovieCollection {
         }
     }
 
-    // Replaces the current collection with movies from the file
     public void readFromFile() throws IOException {
         MovieCollection loaded = new MovieCollection();
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
@@ -168,7 +150,6 @@ public class MovieCollection {
                 }
             }
         }
-        // copy only after the whole file was read without errors
         items = loaded.items;
         count = loaded.count;
     }

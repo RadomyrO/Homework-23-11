@@ -6,7 +6,7 @@ import part2_collection.MovieCollection;
 import java.io.IOException;
 import java.util.Scanner;
 
-// Part 3. User dialogue: interactive menu for the movie database
+// Part 3. User dialogue
 public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Welcome to the movie database!");
 
-        // Part 3.1 Main loop: after every option user returns to the menu
+        // Part 3.1 menu loop
         while (true) {
             printMenu();
             int option = readInt("Your choice: ");
@@ -27,7 +27,7 @@ public class Main {
         }
     }
 
-    // Part 3.2 Menu
+    // Part 3.2 menu
     public static void printMenu() {
         System.out.println();
         System.out.println("Choose an option to proceed:");
@@ -44,7 +44,7 @@ public class Main {
         System.out.println("0 - exit the program");
     }
 
-    // Part 3.3 Calls the method for the chosen option
+    // Part 3.3
     private static void handleOption(int option) {
         switch (option) {
             case 1 -> movies.printList();
@@ -61,7 +61,7 @@ public class Main {
         }
     }
 
-    // ---------- Part 3.4 Menu actions ----------
+    // Part 3.4 actions
 
     private static void addMovie() {
         String name = readLine("Title: ");
@@ -73,7 +73,6 @@ public class Main {
             movies.add(new Movie(name, director, genre, year, rating));
             System.out.println("Movie added.");
         } catch (IllegalArgumentException e) {
-            // setter rejected the value (wrong year or rating)
             System.out.println("Movie not added: " + e.getMessage());
         }
     }
@@ -81,7 +80,7 @@ public class Main {
     private static void removeMovie() {
         movies.printList();
         int number = readInt("Enter number of the movie to delete: ");
-        // user sees numbers from 1, collection uses indexes from 0
+        // -1 because list starts from 1
         if (movies.remove(number - 1)) {
             System.out.println("Movie removed.");
         } else {
@@ -113,14 +112,13 @@ public class Main {
         }
     }
 
-    // ---------- Part 3.5 Safe input helpers ----------
+    // Part 3.5 input
 
     private static String readLine(String prompt) {
         System.out.print(prompt);
         return scanner.nextLine().trim();
     }
 
-    // Repeats the question until user enters an integer
     private static int readInt(String prompt) {
         while (true) {
             try {
@@ -131,7 +129,7 @@ public class Main {
         }
     }
 
-    // Repeats the question until user enters a number (both 8.5 and 8,5 work)
+    // 8,5 also works
     private static double readDouble(String prompt) {
         while (true) {
             try {

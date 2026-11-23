@@ -2,28 +2,22 @@ package part1_item;
 
 import java.time.Year;
 
-// Part 1. Item class: Movie
-// One hobby object (item) of the database.
+// Part 1. Item class
 public class Movie {
 
-    // ---------- Public members ----------
-
-    // Public constants: allowed limits for numeric properties
-    public static final int MIN_YEAR = 1888;      // year of the first film ever
+    // public constants
+    public static final int MIN_YEAR = 1888;
     public static final double MAX_RATING = 10.0;
-
-    // Separator used when the movie is written to the file
     public static final String FILE_SEPARATOR = ";";
 
-    // ---------- Private members ----------
+    // private fields
+    private String name;
+    private String director;
+    private String genre;
+    private int year;
+    private double rating;
 
-    private String name;       // movie title, e.g. "Inception"
-    private String director;   // director's name
-    private String genre;      // genre, e.g. "Sci-Fi"
-    private int year;          // numeric property: release year
-    private double rating;     // numeric property: rating 0..10
-
-    // Part 1.1 Constructor
+    // Part 1.1 constructor
     public Movie(String name, String director, String genre, int year, double rating) {
         setName(name);
         setDirector(director);
@@ -32,9 +26,7 @@ public class Movie {
         setRating(rating);
     }
 
-    // Part 1.2 Getters and setters for private properties
-
-    // Removes spaces at the ends and the file separator, so the file never breaks
+    // Part 1.2 getters and setters
     private static String clean(String text) {
         return text.trim().replace(FILE_SEPARATOR, ",");
     }
@@ -68,7 +60,6 @@ public class Movie {
     }
 
     public void setYear(int year) {
-        // do not allow impossible years
         if (year < MIN_YEAR) {
             throw new IllegalArgumentException("Year must be >= " + MIN_YEAR);
         }
@@ -80,19 +71,18 @@ public class Movie {
     }
 
     public void setRating(double rating) {
-        // rating must be inside 0..10
         if (rating < 0 || rating > MAX_RATING) {
             throw new IllegalArgumentException("Rating must be from 0 to " + MAX_RATING);
         }
         this.rating = rating;
     }
 
-    // Part 1.3 getTitle(): short one-line description
+    // Part 1.3 short info
     public String getTitle() {
         return String.format("%s (%d) - %s, rating %.1f", name, year, director, rating);
     }
 
-    // Part 1.4 getDescription(): detailed multi-line description
+    // Part 1.4 full info
     public String getDescription() {
         return "Title:    " + name + "\n"
              + "Director: " + director + "\n"
@@ -102,30 +92,28 @@ public class Movie {
              + "Classic:  " + (isClassic(currentYear()) ? "yes" : "no");
     }
 
-    // Part 1.5 Other methods to handle / calculate item data
+    // Part 1.5 other methods
 
-    // Current year from the system clock
     private static int currentYear() {
         return Year.now().getValue();
     }
 
-    // How many years passed since the release
     public int getAge(int currentYear) {
         return currentYear - year;
     }
 
-    // A movie is "classic" if it is older than 25 years
+    // older than 25 years
     public boolean isClassic(int currentYear) {
         return getAge(currentYear) > 25;
     }
 
-    // Rating as 5 stars, e.g. 8.6 -> "****-"
+    // 10 points -> 5 stars
     public String getRatingStars() {
-        int stars = (int) Math.round(rating / 2);  // 10-point scale -> 5 stars
+        int stars = (int) Math.round(rating / 2);
         return "*".repeat(stars) + "-".repeat(5 - stars);
     }
 
-    // Does the movie contain the phrase in title, director or genre (ignoring case)
+    // for search
     public boolean matches(String phrase) {
         String p = phrase.toLowerCase();
         return name.toLowerCase().contains(p)
@@ -133,15 +121,13 @@ public class Movie {
             || genre.toLowerCase().contains(p);
     }
 
-    // Part 1.6 Conversion to / from one line of the file
+    // Part 1.6 for file
 
-    // Movie -> "Inception;Christopher Nolan;Sci-Fi;2010;8.8"
     public String toFileLine() {
         return name + FILE_SEPARATOR + director + FILE_SEPARATOR + genre
              + FILE_SEPARATOR + year + FILE_SEPARATOR + rating;
     }
 
-    // "Inception;Christopher Nolan;Sci-Fi;2010;8.8" -> Movie
     public static Movie fromFileLine(String line) {
         String[] parts = line.split(FILE_SEPARATOR);
         if (parts.length != 5) {
