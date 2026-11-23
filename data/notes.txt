@@ -1,0 +1,9 @@
+Java homework notes
+
+Read file line by line
+Count lines and characters
+
+Use try-with-resources
+BufferedReader is fast
+
+Done
